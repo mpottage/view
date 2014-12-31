@@ -73,17 +73,18 @@ def gen_nav_html(img):
     path_parts = img.directory.split('/')
     nav_items = ""
     nav_items += common.folder_list_item.format(
-            url=common.link_base, name="All")
+            url=common.link_base+common.link_tail, name="All")
     for index,name in enumerate(path_parts):
-        url = common.link_base+'/'.join(path_parts[:index+1])+'/'
+        url = common.link_base+'/'.join(path_parts[:index+1])+'/'+common.link_tail
         nav_items += common.folder_list_item.format(
                 url=url, name=name.replace('_', ' ')
                 )
 
     nav_items += nav_curr_image.format(name=img.name)
 
-    return navigation.format(folders_list=nav_items, next_link=img.next_image,
-            previous_link=img.previous_image)
+    return navigation.format(folders_list=nav_items,
+            next_link=img.next_image+common.link_tail,
+            previous_link=img.previous_image+common.link_tail)
 def gen_image_html(img):
     """Creates the <figure> containing the displayed image"""
     return image.format(img_url=img.raw_url, caption=img.caption)
