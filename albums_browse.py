@@ -14,12 +14,6 @@ import albums_common as common
 # The template is set here, details on templates are found in albums_common.py.
 
 
-#Offline extra settings (specific to browse)
-browse_template_file = "../photo_albums/browse-template.html"
-#Online extra settings
-if common.is_online:
-    browse_template_file = common.document_root+"/photo_albums/browse-template.html"
-
 image_thumbnail = """\
     <figure>
         <a href="{view_url}" class="button">
@@ -99,8 +93,8 @@ def print_page():
     if common.is_online:
         print("Content-Type: text/html\n")
 
-    assert(common.is_safe_path(browse_template_file))
-    template_file = open(browse_template_file).readlines()
+    assert(common.is_safe_path(common.template_file))
+    template_file = open(common.template_file).readlines()
     template_file_line = common.print_header_only(template_file)
 
     print(gen_nav_html())
@@ -118,7 +112,7 @@ def main():
     # CRITICAL error checking
     # Checks for files and folders that HAVE to exist
     assert(os.path.exists(common.server_photo_dir) and
-            os.path.exists(browse_template_file))
+            os.path.exists(common.template_file))
     # Path safety is checked at point of use, fails if unsafe
 
     # Recoverable error checking

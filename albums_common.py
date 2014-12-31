@@ -27,8 +27,9 @@ import html
 
 #Offline settings
 document_root = "../../"
-web_icons_dir = "../photo_albums/icons/"
 server_photo_dir = "../photo_albums/photos/"
+template_file = "../photo_albums/template.html"
+web_icons_dir = "../photo_albums/icons/"
 web_photo_dir = server_photo_dir
 is_online = False
 link_base = ''
@@ -48,6 +49,7 @@ link_tail = '#albums-bar'
 if os.path.exists("/srv/www/yorkbeach"):
     document_root = "/srv/www/yorkbeach/"
     server_photo_dir = document_root+"photo_albums/albums/"
+    template_file = document_root+"photo_albums/template.html"
     web_photo_dir = "/photo_albums/albums/"
     web_icons_dir = "/photo_albums/icons/"
     link_base = "/photo_albums/"

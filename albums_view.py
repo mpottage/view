@@ -48,7 +48,7 @@ class Image:
     """Represents an image. Collects together all the values used to display
     one."""
     def __init__(self, r_albums_addr):
-        """Assumes that r_albums_addr refers to an image"""
+        """Assumes that r_albums_addr refers to an image and is in a sub-folder"""
         path_parts = r_albums_addr.rsplit('/', 1)
         self.directory = path_parts[0]
         self.name      = path_parts[1].rsplit('.')[0].replace('_',' ')
@@ -93,8 +93,8 @@ def print_page():
     if common.is_online:
         print("Content-Type: text/html\n")
 
-    assert(common.is_safe_path(view_template_file))
-    template_file = open(view_template_file).readlines()
+    assert(common.is_safe_path(common.template_file))
+    template_file = open(common.template_file).readlines()
     template_file_line = common.print_header_only(template_file)
 
     # Image can't be instantiated if there is an error
@@ -117,7 +117,7 @@ def main():
     # CRITICAL error checking
     # Checks for files and folders that HAVE to exist
     assert(os.path.exists(common.server_photo_dir) and
-            os.path.exists(view_template_file) and
+            os.path.exists(common.template_file) and
             common.is_safe_path(common.server_photo_dir+'/'+common.query_path))
     # Path safety is normally checked at point of use, fails if unsafe
     # EXCEPTION: The viewed image address.
@@ -127,7 +127,7 @@ def main():
             not os.path.exists(common.server_photo_dir+common.query_path) or
             not common.is_image(common.query_path) ):
         common.any_error += common.error_msg.format(
-                message="Sorry, the image \""+common.query_path+"\" does "
+                message="Sorry, the photo \""+common.query_path+"\" does "
                 "not exist.\n")
         common.query_path = "" # Default is to print no image
 
