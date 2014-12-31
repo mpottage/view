@@ -15,6 +15,7 @@
 #       requests and paths starting with "/".
 import os
 import re
+import html
 
 #Contains functions and variables used by both viewing and browsing.
 
@@ -53,7 +54,8 @@ if os.path.exists("/srv/www/yorkbeach"):
     is_online = True
 
 #Both offline and online
-query_path = os.environ["QUERY_STRING"] # May be edited by users of this module
+    # May be edited by users of this module, escaped to prevent XSS
+query_path = html.escape(os.environ["QUERY_STRING"])
 any_error = "" # Contains error message to be displayed (if any)
 
 # Templates used by all sections of albums
@@ -108,7 +110,7 @@ def split_images_folders(path):
     folders = []
     for filename in all_files:
         if filename[0]=='.': #Skip hidden files
-            pass
+            continue
         full_path = path+'/'+filename
         # No check for symlinks, as will fail if an unsafe folder is opened
         if os.path.isdir(full_path):

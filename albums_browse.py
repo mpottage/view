@@ -125,7 +125,7 @@ def main():
     if (not common.clean_path(common.query_path) or
             not os.path.exists(common.server_photo_dir+common.query_path) ):
         common.any_error += common.error_msg.format(
-                message="Sorry, the album \""+common.query_path+"\" does not exist.\n")
+                message="Sorry, the folder \""+common.query_path+"\" does not exist.\n")
         common.query_path = "" # Default is to print main directory
     elif common.query_path and common.query_path[-1]!='/':
         common.query_path += '/'
