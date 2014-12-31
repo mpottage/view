@@ -34,18 +34,6 @@ folder_thumbnail = """\
         </a>
     </figure>
 """
-navigation = """\
-<header id="albums-bar">
-    <nav id="location">
-        <ol>
-        {folders_list}
-        </ol>
-    </nav>
-    <!--<div id="slideshow">
-        <a href="{slideshow_link}">Slideshow</a>
-    </div>-->
-</header>
-"""
 thumbnails_before = '<figure class="albums-thumbnails">\n'
 thumbnails_after  = '</figure>\n'
 
@@ -79,15 +67,16 @@ def gen_nav_html():
     """Similar to gen_thumbnails_html, but for navigation"""
     path_parts = common.query_path.split('/')[:-1] #Assumed to end with '/'
     nav_folder_list = ""
-    nav_folder_list += common.folder_list_item.format(
+    nav_folder_list += common.location_list_item.format(
             url=common.link_base+common.link_tail, name="All")
     for index,name in enumerate(path_parts):
         url = common.link_base+'/'.join(path_parts[:index+1])+'/'+common.link_tail
-        nav_folder_list += common.folder_list_item.format(
+        nav_folder_list += common.location_list_item.format(
                 url=url, name=name.replace('_', ' ')
                 )
         
-    return navigation.format(folders_list=nav_folder_list, slideshow_link="#")
+    return common.header.format(
+            header_content=common.location_list.format(ls=nav_folder_list))
 
 def print_page():
     if common.is_online:
@@ -101,25 +90,18 @@ def print_page():
     print(common.any_error,end='') #Does nothing if there is no message
     print(gen_thumbnails_html())
 
-    while template_file_line < len(template_file): #Print rest of template
-        print(template_file[template_file_line],end='')
-        template_file_line += 1
+    common.print_rest(template_file, template_file_line)
 
 def main():
     """Starts HTML generation and validates paths used"""
-    #global common.query_path, common.any_error
 
-    # CRITICAL error checking
-    # Checks for files and folders that HAVE to exist
-    assert(os.path.exists(common.server_photo_dir) and
-            os.path.exists(common.template_file))
-    # Path safety is checked at point of use, fails if unsafe
+    common.verify_core_paths()
 
     # Recoverable error checking
     if (not common.clean_path(common.query_path) or
             not os.path.exists(common.server_photo_dir+common.query_path) ):
         common.any_error += common.error_msg.format(
-                message="Sorry, the folder \""+common.query_path+"\" does not exist.\n")
+                message="Sorry, the folder <q>"+common.query_path+"</q> does not exist.\n")
         common.query_path = "" # Default is to print main directory
     elif common.query_path and common.query_path[-1]!='/':
         common.query_path += '/'

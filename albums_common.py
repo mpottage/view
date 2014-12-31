@@ -63,8 +63,20 @@ any_error = "" # Contains error message to be displayed (if any)
 # Templates used by all sections of albums
 # Navigation bar, location bar is given by a HTML list, items can be generated
 # using folder_list_item. Code for nav is specific to module
-folder_list_item = """\
+location_list = """\
+    <nav id="location">
+        <ol>
+        {ls}
+        </ol>
+    </nav>
+"""
+location_list_item = """\
             <li><a href="{url}">{name}</a></li>
+"""
+header = """\
+<header id="albums-bar">
+    {header_content}
+</header>
 """
 
 #Places an error message in a suitable block
@@ -98,6 +110,10 @@ def print_header_only(template_filelines):
         print(template_filelines[curr_line],end='')
         curr_line += 1
     return curr_line+1
+def print_rest(template_filelines, index):
+    while index < len(template_file): #Print rest of template
+        print(template_filelines[index],end='')
+        index += 1
 
 def split_images_folders(path):
     """Returns two separate alphabetical lists, of the folders and images in a directory
@@ -120,4 +136,13 @@ def split_images_folders(path):
         elif os.path.isfile(full_path) and is_image(filename):
             images.append(filename)
     return (images,folders)
+
+# To be called by the photo albums before starting page generation.
+def verify_core_paths():
+    # CRITICAL error checking
+    # Checks for files and folders that HAVE to exist
+    assert(os.path.exists(server_photo_dir) and
+            os.path.exists(template_file))
+    # Path safety is checked at point of use, fails if unsafe
+    # See albums_*.print_page and albums_common.split_images_folders
 
