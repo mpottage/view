@@ -7,6 +7,7 @@
 #   can edit files inside document_root (excluding the albums code) via sftp.
 
 import os
+import html
 import albums_common as common
 
 #Displays a single image on a page.
@@ -14,7 +15,7 @@ import albums_common as common
 # The template is set here, details on templates are found in albums_common.py.
 
 navigation_links = """\
-    <div id="next-previous">
+    <div id="controls">
         <a href="{previous_link}" id="previous-image"><span>Previous</span></a><!--
         --><a href="{next_link}" id="next-image"><span>Next</span></a>
     </div>
@@ -122,7 +123,7 @@ def main():
             not os.path.exists(common.server_photo_dir+common.query_path) or
             not common.is_image(common.query_path) ):
         common.any_error += common.error_msg.format(
-                message="Sorry, the photo <q>"+common.query_path+"</q> does "
+                message="Sorry, the photo <q>"+html.escape(common.query_path)+"</q> does "
                 "not exist.\n")
         common.query_path = "" # Default is to print no image
 

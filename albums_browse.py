@@ -6,6 +6,7 @@
 # Security Assumptions: Attacker has direct or indirect access to script via http/https,
 #   can edit files inside document_root (excluding the albums code) via sftp.
 import os
+import html
 import albums_common as common
 
 #All links to files start with '/', indicating root of albums.
@@ -101,7 +102,8 @@ def main():
     if (not common.clean_path(common.query_path) or
             not os.path.exists(common.server_photo_dir+common.query_path) ):
         common.any_error += common.error_msg.format(
-                message="Sorry, the folder <q>"+common.query_path+"</q> does not exist.\n")
+                message="Sorry, the folder <q>"+html.escape(common.query_path)+""
+                "</q> does not exist.\n")
         common.query_path = "" # Default is to print main directory
     elif common.query_path and common.query_path[-1]!='/':
         common.query_path += '/'
