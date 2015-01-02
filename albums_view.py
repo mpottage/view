@@ -68,12 +68,12 @@ def gen_nav_html(img):
     """
     nav_items = ""
     nav_items += common.location_list_item.format(
-            url=common.link_base+common.link_tail, name="All")
+            url=common.link_base, name="All")
     if img:
         # No errors.
         path_parts = img.directory.split('/')
         for index,name in enumerate(path_parts):
-            url = common.link_base+'/'.join(path_parts[:index+1])+'/'+common.link_tail
+            url = common.link_base+'/'.join(path_parts[:index+1])+'/'
             nav_items += common.location_list_item.format(
                     url=url, name=name.replace('_', ' ')
                     )
@@ -81,8 +81,8 @@ def gen_nav_html(img):
         nav_items += nav_curr_image.format(name=img.name)
 
         return common.header.format(header_content=common.location_list.format(ls=nav_items)+
-                navigation_links.format(next_link=img.next_image+common.link_tail,
-                previous_link=img.previous_image+common.link_tail))
+                navigation_links.format(next_link=img.next_image,
+                previous_link=img.previous_image))
     else:
         # A user input error, just show one link.
         return common.header.format(header_content=common.location_list.format(ls=nav_items))

@@ -33,17 +33,6 @@ web_photo_dir = server_photo_dir
 is_online = False
 link_base = ''
 
-    # Used to ensure that the entire image (in view) is visible onscreen
-    #  It is an alternative to JavaScript resizing the image to be visible.
-    #  TODO: Use JavaScript solution instead to provide a better experience.
-    # Also used to ensure that  it scrolls down to show as many folders as
-    #  possible (which is very useful on mobile devices).
-
-    # Causes the browser to scroll down so that the albums navigation bar is at
-    # the top of the screen, but only if it can scroll down (ie. when content would
-    # be offscreen)
-link_tail = '#albums-bar'
-
 #Online settings
 if os.path.exists("/srv/www/yorkbeach"):
     document_root = "/srv/www/yorkbeach/"

@@ -53,12 +53,12 @@ def gen_thumbnails_html():
     # Display folders first
     for folder in items[1]:
         name = folder.replace("_", " ")
-        view_url = core_view_url+folder+'/'+common.link_tail
+        view_url = core_view_url+folder+'/'
         res += folder_thumbnail.format(name=name, view_url=view_url)
     for img in items[0]:
         name = img.rsplit(".",1)[0].replace("_", " ")
         img_url = core_photo_url+img
-        view_url = core_view_url+img+common.link_tail
+        view_url = core_view_url+img
         res += image_thumbnail.format(name=name,img_url=img_url,
             view_url=view_url)
     res += thumbnails_after #End thumbnails container
@@ -69,9 +69,9 @@ def gen_nav_html():
     path_parts = common.query_path.split('/')[:-1] #Assumed to end with '/'
     nav_folder_list = ""
     nav_folder_list += common.location_list_item.format(
-            url=common.link_base+common.link_tail, name="All")
+            url=common.link_base, name="All")
     for index,name in enumerate(path_parts):
-        url = common.link_base+'/'.join(path_parts[:index+1])+'/'+common.link_tail
+        url = common.link_base+'/'.join(path_parts[:index+1])+'/'
         nav_folder_list += common.location_list_item.format(
                 url=url, name=name.replace('_', ' ')
                 )
