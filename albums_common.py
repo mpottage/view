@@ -99,7 +99,7 @@ def print_header_only(template_filelines):
         curr_line += 1
     return curr_line+1
 def print_rest(template_filelines, index):
-    while index < len(template_file): #Print rest of template
+    while index < len(template_filelines): #Print rest of template
         print(template_filelines[index],end='')
         index += 1
 
