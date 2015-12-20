@@ -34,8 +34,8 @@ is_online = False
 link_base = ''
 
 #Online settings
-if os.path.exists("/srv/www/yorkbeach"):
-    document_root = "/srv/www/yorkbeach/"
+if os.path.exists("/var/www/yorkbeach"):
+    document_root = "/var/www/yorkbeach/static/"
     server_photo_dir = document_root+"photo_albums/albums/"
     template_file = document_root+"photo_albums/template.html"
     web_photo_dir = "/photo_albums/albums/"
