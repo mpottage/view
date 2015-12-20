@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# Copyright Matthew Pottage 2014
+# Copyright Matthew Pottage 2015
 # Produces photo albums for a website, based on the directory hierachy of a
 # specified directory.
 # Security Assumptions: Attacker has direct or indirect access to script via http/https,
@@ -73,32 +73,34 @@ error_msg = """\
 """
 
 def clean_path(tainted_path):
-    """Searchs for accessing hidden files, moving up directories and attempting
-    to access a home directoryr
+    """Searches for accessing hidden files, moving up directories and attempting
+    to access a home directory.
     Returns True if the path does none of these things
+    WARNING: This does not imply that the path is safe.
     """
     return not bool(re.search(r"(__|^\.|/\.|\.\.|~|\\|\./|//|^/)", tainted_path))
 
 real_document_root = os.path.realpath(document_root)
 def is_safe_path(path):
     """Checks that the path is inside the server root.
-        i.e. Doesn't contain a symlink accessing private server data
+        i.e. Doesn't contain a symlink accessing private server data.
     """
     return os.path.realpath(path).startswith(real_document_root)
 
 def is_image(filename):
-    """Checks that the file extension is jpg, png or svg"""
+    """Checks that the file extension is jpg, png or svg."""
     return (filename.endswith(".jpg") or filename.endswith(".JPG")
             or filename.endswith(".png") or filename.endswith(".svg"))
 
 def print_header_only(template_filelines):
-    """Prints up to ${content} in a file"""
+    """Prints up to ${content} in a file, provided as a list of its lines."""
     curr_line = 0
     while template_filelines[curr_line]!="${content}\n":
         print(template_filelines[curr_line],end='')
         curr_line += 1
     return curr_line+1
 def print_rest(template_filelines, index):
+    """Prints all the lines, from index up to the end of the list."""
     while index < len(template_filelines): #Print rest of template
         print(template_filelines[index],end='')
         index += 1
@@ -111,14 +113,15 @@ def split_images_folders(path):
     """
     assert(is_safe_path(path))
     all_files = os.listdir(path)
-    all_files.sort() #Sorted as isn't by default
+    all_files.sort() #Sort, as filenames are not sorted by default.
     images = []
     folders = []
     for filename in all_files:
         if filename[0]=='.': #Skip hidden files
             continue
         full_path = path+'/'+filename
-        # No check for symlinks, as will fail if an unsafe folder is opened
+        # No check for symlinks, as any attempt to access an unsafe folder will
+        # fail, should it be requested.
         if os.path.isdir(full_path):
             folders.append(filename)
         elif os.path.isfile(full_path) and is_image(filename):
@@ -127,8 +130,9 @@ def split_images_folders(path):
 
 # To be called by the photo albums before starting page generation.
 def verify_core_paths():
-    # CRITICAL error checking
-    # Checks for files and folders that HAVE to exist
+    """CRITICAL error checking.
+    This checks for files and folders that are required to exist.
+    """
     assert(os.path.exists(server_photo_dir) and
             os.path.exists(template_file))
     # Path safety is checked at point of use, fails if unsafe

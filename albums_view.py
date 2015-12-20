@@ -63,8 +63,10 @@ class Image:
         self.previous_image = link_next_base+images_in_dir[index-1]
 
 def gen_nav_html(img):
-    """Generates a list containing the current directory and all those above it
-    for navigation. Also creates a link to the next image and the previous one.
+    """Generates the navigation for the albums.
+    This includes a list containing the current directory and all those above it
+    for the navigation bar and links to both the next image and the previous
+    one.
     """
     nav_items = ""
     nav_items += common.location_list_item.format(
@@ -110,8 +112,9 @@ def print_page():
     common.print_rest(template_file, template_file_line)
 
 def main():
-    """Starts HTML generation and validates paths used"""
-
+    """Runs HTML generation and validates paths used to access and display the
+    images.
+    """
     # CRITICAL error checking
     common.verify_core_paths();
     assert(common.is_safe_path(common.server_photo_dir+'/'+common.query_path))

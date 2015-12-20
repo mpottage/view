@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# Copyright Matthew Pottage 2014
+# Copyright Matthew Pottage 2015
 # Produces photo albums for a website, based on the directory hierachy of a
 # specified directory.
 # Security Assumptions: Attacker has direct or indirect access to script via http/https,
@@ -12,8 +12,6 @@ import albums_common as common
 #All links to files start with '/', indicating root of albums.
 # ../, ~, ./, etc. are not permitted in links, even where valid.
 # Configuration is done using the variables in albums_common.py.
-# The template is set here, details on templates are found in albums_common.py.
-
 
 image_thumbnail = """\
     <figure>
@@ -94,7 +92,7 @@ def print_page():
     common.print_rest(template_file, template_file_line)
 
 def main():
-    """Starts HTML generation and validates paths used"""
+    """Starts HTML generation and validates file paths used"""
 
     common.verify_core_paths()
 
