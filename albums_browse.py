@@ -38,7 +38,7 @@ thumbnails_after  = '</figure>\n'
 
 def gen_thumbnails_html():
     """Generates the html to display all the thumbnails for images in the folder
-    referenced by "query_path", assumes that split_images_folders checks for
+    referenced by "common.query_path", assumes that split_images_folders checks for
     path safety.
     """
     res = thumbnails_before #Begin thumbnails container
@@ -47,7 +47,14 @@ def gen_thumbnails_html():
     if not items[0] and not items[1]:
         res += "Empty"
     core_view_url = common.link_base+common.query_path
-    core_photo_url = common.web_photo_dir+common.query_path
+    core_photo_url = ""
+    #Only show thumbnails if the directory for them is safe and exists,
+    # as then presumably the thumbnails also exist.
+    svr_thumbnails = common.server_thumbnails_dir+common.query_path
+    if common.is_safe_path(svr_thumbnails) and os.path.exists(svr_thumbnails):
+        core_photo_url = common.web_thumbnails_dir+common.query_path
+    else:
+        core_photo_url = common.web_photo_dir+common.query_path
     # Display folders first
     for folder in items[1]:
         name = folder.replace("_", " ")
@@ -106,7 +113,7 @@ def main():
     elif common.query_path and common.query_path[-1]!='/':
         common.query_path += '/'
 
-    print_page() # All errors safely handled, so now safe to handle query_string
+    print_page() # All errors safely handled.
 
 if __name__=="__main__":
     main()

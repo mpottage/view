@@ -27,9 +27,11 @@ import re
 #Offline settings
 document_root = "../../"
 server_photo_dir = "../photo_albums/photos/"
+server_thumbnails_dir = "../photo_albums/thumbnails/"
 template_file = "../photo_albums/template.html"
 web_icons_dir = "../photo_albums/icons/"
 web_photo_dir = server_photo_dir
+web_thumbnails_dir = server_thumbnails_dir
 is_online = False
 link_base = ''
 
@@ -37,8 +39,10 @@ link_base = ''
 if os.path.exists("/var/www/yorkbeach"):
     document_root = "/var/www/yorkbeach/static/"
     server_photo_dir = document_root+"photo_albums/albums/"
+    server_thumbnails_dir = document_root+"photo_albums/thumbnails/"
     template_file = document_root+"photo_albums/template.html"
     web_photo_dir = "/photo_albums/albums/"
+    web_thumbnails_dir = "/photo_albums/thumbnails/"
     web_icons_dir = "/photo_albums/icons/"
     link_base = "/photo_albums/"
     is_online = True
