@@ -92,7 +92,7 @@ def gen_image_html(img):
     """Creates the <figure> containing the displayed image"""
     return image.format(img_url=img.raw_url, caption=img.caption)
 
-def print_page():
+def print_page(query_path, error_html=""):
     if common.is_online:
         print("Content-Type: text/html\n")
 
@@ -103,9 +103,9 @@ def print_page():
     # Image can't be instantiated if there is an error
     if common.any_error:
         print(gen_nav_html(None))
-        print(common.any_error,end='')
+        print(error_html,end='')
     else:
-        img = Image(common.query_path)
+        img = Image(query_path)
         print(gen_nav_html(img))
         print(gen_image_html(img))
 
@@ -115,22 +115,24 @@ def main():
     """Runs HTML generation and validates paths used to access and display the
     images.
     """
+    query_path = common.raw_query_path()
+    error_html = ""
     # CRITICAL error checking
     common.verify_core_paths();
-    assert(common.is_safe_path(common.server_photo_dir+'/'+common.query_path))
+    assert(common.is_safe_path(common.server_photo_dir+'/'+query_path))
     # Path safety is normally checked at point of use, fails if unsafe
     # EXCEPTION: The viewed image address.
 
     # Recoverable error checking
-    if (not common.clean_path(common.query_path) or
-            not os.path.exists(common.server_photo_dir+common.query_path) or
-            not common.is_image(common.query_path) ):
-        common.any_error += common.error_msg.format(
-                message="Sorry, the photo <q>"+html.escape(common.query_path)+"</q> does "
+    if (not common.clean_path(query_path) or
+            not os.path.exists(common.server_photo_dir+query_path) or
+            not common.is_image(query_path) ):
+        error_html += common.error_msg.format(
+                message="Sorry, the photo <q>"+html.escape(query_path)+"</q> does "
                 "not exist.\n")
-        common.query_path = "" # Default is to print no image
+        query_path = "" # Default is to print no image
 
-    print_page() # All errors safely handled, so now safe to display the page.
+    print_page(query_path, error_html) # All errors now safely handled.
 
 if __name__=="__main__":
     main()

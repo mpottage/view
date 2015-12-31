@@ -49,7 +49,6 @@ if os.path.exists("/var/www/yorkbeach"):
 
 #Both offline and online
     # May be edited by users of this module
-query_path = os.environ["QUERY_STRING"]
 any_error = "" # Contains error message to be displayed (if any)
 
 # Templates used by all sections of albums
@@ -76,6 +75,8 @@ error_msg = """\
 <div class="error_msg">{message}</div>
 """
 
+def raw_query_path():
+    return os.environ["QUERY_STRING"]
 def clean_path(tainted_path):
     """Searches for accessing hidden files, moving up directories and attempting
     to access a home directory.
