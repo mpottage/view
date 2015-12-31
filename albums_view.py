@@ -23,7 +23,7 @@ navigation_links = """\
 
 image = """\
 <figure class="large-image">
-    <img src="{img_url}" alt="{caption}">
+    <img src="{img_url}" alt="">
     <figcaption>{caption}</figcaption>
 </figure>
 """

@@ -17,7 +17,7 @@ image_thumbnail = """\
     <figure>
         <a href="{view_url}" class="button">
             <div class="thumbnail-only">
-                <img src="{img_url}" alt="{name}">
+                <img src="{img_url}" alt="">
             </div>
             <div class="name">{name}</div>
         </a>
