@@ -7,7 +7,7 @@
 #   can edit files inside document_root (excluding the albums code) via sftp.
 import os
 import html
-import albums_common as common
+import view_common as common
 
 #All links to files start with '/', indicating root of albums.
 # ../, ~, ./, etc. are not permitted in links, even where valid.

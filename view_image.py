@@ -8,7 +8,7 @@
 
 import os
 import html
-import albums_common as common
+import view_common as common
 
 #Displays a single image on a page.
 # Configuration is in common.
