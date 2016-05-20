@@ -47,10 +47,6 @@ if os.path.exists("/var/www/yorkbeach"):
     link_base = "/photo_albums/"
     is_online = True
 
-#Both offline and online
-    # May be edited by users of this module
-any_error = "" # Contains error message to be displayed (if any)
-
 # Templates used by all sections of albums
 # Navigation bar, location bar is given by a HTML list, items can be generated
 # using folder_list_item. Code for nav is specific to module

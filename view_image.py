@@ -101,7 +101,7 @@ def print_page(query_path, error_html=""):
     template_file_line = common.print_header_only(template_file)
 
     # Image can't be instantiated if there is an error
-    if common.any_error:
+    if len(error_html)>0:
         print(gen_nav_html(None))
         print(error_html,end='')
     else:
