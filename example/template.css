@@ -1,0 +1,386 @@
+/* Styles for view template.
+    Doesn't require Javascript to display images, however JavaScript is needed
+     for slideshows and for .view address collapsing.
+*/
+/* Albums navigation bar */
+header.view {
+    background-color: rgb(255, 254, 167); /*Sandy yellow */
+    line-height: 2.4rem;
+    overflow: auto;
+    margin-bottom: 0.2em;
+}
+header.view nav.view {
+    float: left;
+    padding-left: 0.5em;
+}
+/* Folder links in a list */
+    header.view nav.view ol {
+        display: block;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        overflow: hidden;
+    }
+    header.view nav.view ol li {
+        display: inline-block;
+    }
+
+/* Collapsed links on narrow screens.
+   Transition: Enlarges hidden text on view */
+header.view nav.view ol li {
+    -webkit-transition: font-size 0.15s ease, visibility 0s 0.15s;
+    transition: font-size 0.15s ease, visibility 0s 0.15s;
+}
+header.view nav.view.expanded ol li {
+    -webkit-transition: font-size 0.1s ease-out, visibility 0s 0s;
+    transition: font-size 0.1s ease-out, visibility 0s 0s;
+}
+header.view nav.view.no-transitions ol li {
+    display: none;
+    -webkit-transition: none!important;
+    transition: none!important;
+}
+header.view nav.view.collapsed ol li {
+    visibility: hidden; /* Transitions don't act on display: none */
+    font-size: 0em;
+    height: 0px;
+}
+header.view nav.view.collapsed ol li .current::before {
+    display: none;
+}
+header.view nav.view.collapsed ol li:first-child {
+    visibility: visible;
+    height: auto;
+    font-size: 1em;
+}
+.view button#toggle-full-location {
+    display: none;
+    width: 2.32rem; /* Same as next/previous links. */
+}
+.view.collapsed button#toggle-full-location,
+.view.expanded button#toggle-full-location {
+    display: inline-block;
+}
+.view.collapsed button#toggle-full-location::before {
+    content: "…";
+    font-weight: bold;
+}
+/* Restore icon (license CC-BY-SA) */
+.view.expanded button#toggle-full-location::before {
+    content: url(/icons/restore-location.svg);
+}
+.view.expanded button#toggle-full-location:active::before {
+    content: url(/icons/restore-location-white.svg);
+}
+
+/* Folder icon (license CC-BY-SA) */
+header.view nav.view ol::before {
+    content: url(/icons/folder.svg);
+}
+
+header.view a,
+header.view button,
+header.view .current {
+    display: inline-block;
+    text-decoration: none;
+    color: black;
+    padding: 0em 0.5em; /* Suitable spacing between links */
+    background-color: rgb(255, 254, 167); /*Sandy yellow */
+    margin: 0px;
+}
+header.view a>span,
+header.view button>span {
+    display: inline-block;
+    overflow: hidden;
+    width: 0; height: 0;
+}
+/* Style button like <a> */
+    header.view button {
+        border: none;
+        font: inherit;
+        cursor: pointer;
+    }
+    /* Work around Firefox peculiarity */
+    header.view button::-moz-focus-inner {
+        padding: 0;
+        border: 0;
+    }
+
+header.view a:hover,
+header.view a:focus,
+header.view button:hover,
+header.view button:focus,
+header.view .current:hover {
+    background-color: rgb(254, 196, 0); /*Darker yellow*/
+}
+header.view a:active,
+header.view button:active{
+    color: white;
+    background-color: rgb(255, 205, 104); /*Pale yellow*/
+}
+header.view .current {
+    font-style: italic;
+    font-weight: bold;
+}
+
+.error_msg {
+    display: block;
+    background-color: #e60000; /* Bright red */
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    padding: 0.5em 0.5em;
+    margin: 0 0.5em;
+}
+/* Warning icon (license CC-BY-SA) */
+.error_msg::before {
+    content: url(/icons/warning.svg);
+    padding-right: 0.4em;
+    min-height: 1.5em;
+    vertical-align: middle;
+}
+
+/* Image thumbnails */
+
+/* Designed to put multiple small images/videos side by side
+   To use, place images (contained in a figure each) in a container of class
+   "view thumbnails" Each image must be enclosed by
+   <figure> ... <div class="thumbnail-only">[img]</div> ... </figure>
+   Note: Would be a bit simpler if display: flex; was used.
+ */
+.view.thumbnails {
+    text-align: center;
+}
+figure.view.thumbnails {
+    margin: 0;
+}
+.view.thumbnails figure {
+    display:        inline-block;
+    text-align:     center;
+    margin:         0.5em 0em; /* Spacing between thumbnails is due to HTML space */
+    padding: 0;
+    vertical-align: top;
+}
+
+.view.thumbnails figure img,
+.view.thumbnails figure video {
+    max-height:     100%;
+    max-width:      100%;
+    border:         none;
+    vertical-align: middle;
+}
+.view.thumbnails figure .thumbnail-only {
+    padding-bottom: 0.25em;
+    width: 100%;
+}
+.view.thumbnails figure.folder img {
+    width: 90%;
+}
+.view.thumbnails .name {
+    font-size: 0.9em;
+}
+
+.view.thumbnails a.button {
+    padding: 0.5em 0.35em;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    font-weight: normal;
+    font-size: 0.9em;
+}
+
+/* Automatically adjust based on screen size.
+   Includes setting appropriate widths and heights.
+   Values have been adjusted to give the desired effect.
+*/
+@media (min-width: 1600px) {
+    .view.thumbnails figure {
+        width: 12%; /* Six pictures in a row */
+    }
+    .view.thumbnails figure .thumbnail-only {
+        height: 9.6vw;
+        /* Avoid overly large portrait pictures
+           At most a square (floor)= 0.8 (content width) * 0.12 (figure width) * 100
+         */
+        line-height: 9.6vw; /* Vertically centre image */
+    }
+}
+@media (max-width: 1599px) {
+    .view.thumbnails figure {
+        width: 16%; /* Six pictures in a row */
+    }
+    .view.thumbnails figure .thumbnail-only {
+        height: 12vw;
+        /* Avoid overly large portrait pictures
+           At most a square (floor)= 0.8 (content width) * 0.16 (figure width) * 100
+         */
+        line-height: 12vw; /* Vertically centre image */
+    }
+}
+@media (max-width: 999px) {
+    .view.thumbnails figure {
+        width: 19%; /* Five */
+    }
+    .view.thumbnails figure .thumbnail-only {
+        height: 18vw;
+        line-height: 18vw;
+    }
+}
+@media (max-width: 800px) {
+    .view.thumbnails figure {
+        width: 24%; /* Four */
+    }
+    .view.thumbnails figure .thumbnail-only {
+        height: 21vw;
+        line-height: 21vw;
+    }
+}
+@media (max-width: 550px) {
+    .view.thumbnails figure {
+        width: 32%; /* Three */
+    }
+    .view.thumbnails figure .thumbnail-only {
+        height: 30vw;
+        line-height: 30vw;
+    }
+}
+@media (max-width: 400px) {
+    .view.thumbnails figure {
+        width: 48%; /* Two */
+    }
+    .view.thumbnails figure .thumbnail-only {
+        height: 45vw;
+        line-height: 45vw;
+    }
+}
+
+/* Displaying a single image */
+
+figure.large-image {
+    margin: 0.2em;
+}
+figure.large-image img {
+    max-height: 90vh;
+    max-width: 100%;
+}
+figure.large-image figcaption {
+    border-top:    thin solid #AAA;
+    border-bottom: thin solid #AAA;
+    font-size:     1em;
+}
+/* Photo icon (license CC-BY-SA) */
+header.view nav.view .image-name::before {
+    content: url(/icons/photo.svg);
+    padding-right: 0.4em;
+}
+header.view nav.view .image-name:active::before {
+    content: url(/icons/photo-white.svg);
+}
+header.view .controls {
+    float: right;
+    padding-left: 0.1em;
+    overflow: hidden;
+    font-size: 1.2em;
+}
+header.view .controls a,
+header.view .controls button {
+    background-repeat: no-repeat;
+    box-sizing: content-box;
+    width: 1.1em;
+    background-position: center center;
+    /* Sliding slideshow duration controls in/out */
+    z-index: 2;
+    position: relative;
+}
+/* Next/previous icons */
+    /* For all text icons */
+header.view .controls a::before {
+    display: inline-block;
+    color: #727272; /* Dark grey */
+    width: 100%;
+    text-align: center;
+    line-height: 1;
+}
+header.view .controls a:active::before {
+    color: white;
+}
+header.view a.next::before,
+header.view a.previous::before {
+    font-size: 1.3em;
+}
+header.view a.next::before {
+    content: "\25B6";
+}
+header.view a.previous::before {
+    content: "\25C0";
+}
+
+/* Slideshow controls, .slideshow = slideshow running */
+
+/* Slideshow icons (license CC-BY-SA) */
+header.view #toggle-slideshow {
+    background-image: url(/icons/slideshow.svg);
+    background-size: 1.3em;
+}
+header.view #toggle-slideshow:active {
+    background-image: url(/icons/slideshow-white.svg);
+}
+header.view .controls.slideshow #toggle-slideshow {
+    background-image: url(/icons/end-slideshow.svg);
+    background-size: 1em;
+    background-position: center 0.43em;
+}
+
+label#set-slideshow-delay-label {
+    display: block;
+    float: left;
+    visibility: hidden;
+    -webkit-transform: translateX(8em);
+    transform: translateX(8em);
+
+    -webkit-transition: -webkit-transform 0.3s ease-in, visibility 0s 0.3s;
+    -webkit-transition: transform 0.3s ease-in, visibility 0s 0.3s;
+    transition: transform 0.3s ease-in, visibility 0s 0.3s;
+}
+.controls.slideshow label#set-slideshow-delay-label {
+    visibility: visible;
+    -webkit-transform: none;
+    transform: none;
+
+    -webkit-transition: -webkit-transform 0.15s ease, visibility 0s 0.1s;
+    -webkit-transition: transform 0.15s ease, visibility 0s 0.1s;
+    transition: transform 0.15s ease, visibility 0s 0s;
+}
+
+input#set-slideshow-delay {
+    border-width: 0;
+    font: inherit;
+    font-size: 1.1em;
+    line-height: 1;
+    width: 2.5em;
+    border-radius: 0.2em;
+}
+label#set-slideshow-delay-label {
+    font: inherit;
+    font-size: 0.9em;
+    margin-right: 0.3em;
+}
+
+@media print {
+    main h1 {
+        margin-bottom: 0.3em;
+    }
+    header.view,
+    header.view a, header.view .current,
+    header.view button {
+        background-color: transparent;
+    }
+    header.view .controls {
+        display: none;
+    }
+    figure.large-image img {
+        max-height: 18.5cm; /* Designed for A4 paper */
+        max-width: 100%;
+    }
+}

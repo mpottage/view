@@ -1,23 +1,17 @@
 #!/usr/bin/python3
 
 # Copyright Matthew Pottage 2014
-# Produces photo albums for a website, based on the directory hierachy of a
-# specified directory.
-# Security Assumptions: Attacker has direct or indirect access to script via http/https,
-#   can edit files inside document_root (excluding the albums code) via sftp.
-
+# See view_common.py.
 import os
 import html
 import view_common as common
 
 #Displays a single image on a page.
-# Configuration is in common.
-# The template is set here, details on templates are found in albums_common.py.
 
 navigation_links = """\
-    <div id="controls">
-        <a href="{previous_link}" id="previous-image"><span>Previous</span></a><!--
-        --><a href="{next_link}" id="next-image"><span>Next</span></a>
+    <div class="controls">
+        <a href="{previous_link}" class="previous"><span>Previous</span></a><!--
+        --><a href="{next_link}" class="next"><span>Next</span></a>
     </div>
 """
 
@@ -29,15 +23,15 @@ image = """\
 """
 
 nav_curr_image = """\
-            <li><span id="current-file" class="image-name">{name}</span></li>
+            <li><span class="current image-name">{name}</span></li>
 """
 
 class Image:
     """Represents an image. Collects together all the values used to display
     one."""
-    def __init__(self, r_albums_addr):
-        """Assumes that r_albums_addr refers to an image"""
-        path_parts = r_albums_addr.rsplit('/', 1)
+    def __init__(self, r_image_addr):
+        """Assumes that r_image_addr refers to an image"""
+        path_parts = r_image_addr.rsplit('/', 1)
         raw_name = ''
         # If the image is in a subfolder
         if len(path_parts)==2:
@@ -48,7 +42,7 @@ class Image:
             raw_name = path_parts[0]
         self.name      = raw_name.rsplit('.')[0].replace('_',' ')
         self.caption   = self.name
-        self.raw_url   = common.web_photo_dir+r_albums_addr
+        self.raw_url   = common.web_photo_dir+r_image_addr
 
         #Finding next and previous images
         #(both are this image if it is the only one in the folder).
@@ -93,7 +87,7 @@ def gen_image_html(img):
     return image.format(img_url=img.raw_url, caption=img.caption)
 
 def print_page(query_path, error_html=""):
-    if common.is_online:
+    if common.output_mime:
         print("Content-Type: text/html\n")
 
     assert(common.is_safe_path(common.template_file))

@@ -1,17 +1,12 @@
 #!/usr/bin/python3
 
 # Copyright Matthew Pottage 2015
-# Produces photo albums for a website, based on the directory hierachy of a
-# specified directory.
-# Security Assumptions: Attacker has direct or indirect access to script via http/https,
-#   can edit files inside document_root (excluding the albums code) via sftp.
+# See view_common.py.
 import os
 import html
 import view_common as common
 
-#All links to files start with '/', indicating root of albums.
-# ../, ~, ./, etc. are not permitted in links, even where valid.
-# Configuration is done using the variables in albums_common.py.
+# Configuration is done using the variables in view_common.py.
 
 image_thumbnail = """\
     <figure>
@@ -24,7 +19,7 @@ image_thumbnail = """\
     </figure>
 """
 folder_thumbnail = """\
-    <figure class="folder-thumbnail">
+    <figure class="folder">
         <a href="{view_url}" class="button">
             <div class="thumbnail-only">
                 <img src='"""+common.web_icons_dir+"""folder-white.svg' alt="">
@@ -33,7 +28,7 @@ folder_thumbnail = """\
         </a>
     </figure>
 """
-thumbnails_before = '<figure class="albums-thumbnails">\n'
+thumbnails_before = '<figure class="view thumbnails">\n'
 thumbnails_after  = '</figure>\n'
 
 def gen_thumbnails_html(query_path):
@@ -88,7 +83,7 @@ def print_page(query_path, error_html=""):
     if query_path and query_path[-1]!='/':
         query_path += '/'
 
-    if common.is_online:
+    if common.output_mime:
         print("Content-Type: text/html\n")
 
     assert(common.is_safe_path(common.template_file))

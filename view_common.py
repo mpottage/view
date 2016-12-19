@@ -4,54 +4,32 @@
 # Produces photo albums for a website, based on the directory hierachy of a
 # specified directory.
 # Security Assumptions: Attacker has direct or indirect access to script via http/https,
-#   can edit files inside document_root (excluding the albums code and directory) via sftp.
+#   can edit files inside document_root (excluding the view code and directory) via sftp.
 
 # Script protects against accessing files outside of the document root by two
 # methods.
 # 1. Checks that the real path of all files accessed starts with the real path
 #       of the document root, i.e. No symlinks to outside the root.
 # 2. Rejects any queries (query_path) paths that contain "../", "~" "/.".
-#       This blocks navigation outside the albums. It also rejects hidden file
-#       requests and paths starting with "/".
-import os
-import re
-
-#Contains functions and variables used by both viewing and browsing.
-
-#Template files are normal HTML, with the exception of one line which
-#contains only "${content}" to indicate that the HTML generated should be placed
-#there. It is expected that the template includes the relevant CSS.
+#       This blocks navigation outside the document root. It also rejects hidden
+#       file requests and paths starting with "/".
+#
+# Template files are normal HTML, with the exception of one line which
+# contains only "${content}" to indicate that the HTML generated should be placed
+# there. It is expected that the template includes the relevant CSS.
 #    All styling is done via CSS. To alter the HTML generated change the format
 #    strings found in the album's code.
 
-#Offline settings
-document_root = "../../"
-server_photo_dir = "../photo_albums/photos/"
-server_thumbnails_dir = "../photo_albums/thumbnails/"
-template_file = "../photo_albums/template.html"
-web_icons_dir = "../photo_albums/icons/"
-web_photo_dir = server_photo_dir
-web_thumbnails_dir = server_thumbnails_dir
-is_online = False
-link_base = ''
+import os
+import re
+from view_settings import *
+#Contains functions and variables used by both viewing and browsing.
 
-#Online settings
-if os.path.exists("/var/www/yorkbeach"):
-    document_root = "/var/www/yorkbeach/static/"
-    server_photo_dir = document_root+"photo_albums/albums/"
-    server_thumbnails_dir = document_root+"photo_albums/thumbnails/"
-    template_file = document_root+"photo_albums/template.html"
-    web_photo_dir = "/photo_albums/albums/"
-    web_thumbnails_dir = "/photo_albums/thumbnails/"
-    web_icons_dir = "/photo_albums/icons/"
-    link_base = "/photo_albums/"
-    is_online = True
-
-# Templates used by all sections of albums
+# Templates used by all sections of view
 # Navigation bar, location bar is given by a HTML list, items can be generated
 # using folder_list_item. Code for nav is specific to module
 location_list = """\
-    <nav id="location">
+    <nav class="view">
         <ol>
         {ls}
         </ol>
@@ -61,7 +39,7 @@ location_list_item = """\
             <li><a href="{url}">{name}</a></li>
 """
 header = """\
-<header id="albums-bar">
+<header class="view">
     {header_content}
 </header>
 """
@@ -129,7 +107,7 @@ def split_images_folders(path):
             images.append(filename)
     return (images,folders)
 
-# To be called by the photo albums before starting page generation.
+# To be called by view before starting page generation.
 def verify_core_paths():
     """CRITICAL error checking.
     This checks for files and folders that are required to exist.
@@ -137,5 +115,5 @@ def verify_core_paths():
     assert(os.path.exists(server_photo_dir) and
             os.path.exists(template_file))
     # Path safety is checked at point of use, fails if unsafe
-    # See albums_*.print_page and albums_common.split_images_folders
-
+    # See view_image.print_page, view_folder.print_page and
+    # view_common.split_images_folders
